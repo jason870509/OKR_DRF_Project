@@ -73,5 +73,31 @@
 
 nav {
   background-color: rgb(55, 46, 182);
+  text-transform: uppercase;
+}
+
+.toggle_container {
+  width: 42px;
+  height: 24px;
+  border: 3px solid #d0f0e070;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px;
+  position: relative;
+  cursor: pointer;
+}
+
+.toggle_icon {
+  font-size: 12px;
+}
+
+.ball {
+  width: 15px;
+  height: 15px;
+  background: #9374e6;
+  border-radius: 50%;
+  position: absolute;
 }
 </style>

@@ -21,7 +21,18 @@ import {
   faUserPlus,
   faSignOutAlt,
   faSignInAlt,
+  faPhone,
+  faEnvelopeOpen,
 } from "@fortawesome/free-solid-svg-icons";
+
+import {
+  faFacebook,
+  faTwitter,
+  faXTwitter,
+  faLinkedin,
+  faInstagram,
+  faPinterest,
+} from "@fortawesome/free-brands-svg-icons";
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";
@@ -39,7 +50,14 @@ library.add(
   faHouseChimney,
   faUserPlus,
   faSignOutAlt,
-  faSignInAlt
+  faSignInAlt,
+  faPhone,
+  faEnvelopeOpen,
+  faFacebook,
+  faXTwitter,
+  faLinkedin,
+  faInstagram,
+  faPinterest
 );
 
 app.use(createPinia());

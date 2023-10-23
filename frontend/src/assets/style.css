@@ -10,11 +10,6 @@
   width: 80px;
 }
 
-.navbar {
-  opacity: 0.9;
-  text-transform: uppercase;
-}
-
 .social a {
   margin-right: 0.4rem;
 }
@@ -22,31 +17,6 @@
 footer {
   background-color: #fff;
   color: #111;
-}
-
-.toggle_container {
-  width: 42px;
-  height: 24px;
-  border: 3px solid #d0f0e070;
-  border-radius: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 2px;
-  position: relative;
-  cursor: pointer;
-}
-
-.toggle_icon {
-  font-size: 12px;
-}
-
-.ball {
-  width: 15px;
-  height: 15px;
-  background: #9374e6;
-  border-radius: 50%;
-  position: absolute;
 }
 
 .theme {
@@ -91,18 +61,15 @@ footer {
   }
 }
 
-
 button {
   padding: 20px;
   cursor: pointer;
   background-color: #6348da;
-  border: none;
+  /* border: none; */
   border-radius: 5px;
   width: max-content;
   color: white;
 }
-
-
 
 #showcase {
   background: url(../img/showcase.jpg) no-repeat top center fixed/cover;
@@ -162,8 +129,6 @@ button {
 #showcase-inner.showcase-search {
   min-height: 270px;
 }
-
-
 
 .listing-preview a {
   position: relative;
