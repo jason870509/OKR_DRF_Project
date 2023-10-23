@@ -116,7 +116,7 @@ const dowloadReport = () => {
 
   <!-- Work -->
   <!-- {% if user.is_authenticated %} -->
-  <section id="work" class="bg-dark text-white submit-button">
+  <section id="work" class="bg-dark text-white">
     <div class="text-center">
       <h2 class="display-4">Complete Form & Upload</h2>
       <h4>Upload your Report files</h4>
@@ -188,7 +188,10 @@ const dowloadReport = () => {
       </div>
       <hr />
       <div class="text-center">
-        <button class="btn btn-secondary text-white btn-lg" type="submit">
+        <button
+          class="submit-button btn btn-primary text-white btn-lg"
+          type="submit"
+        >
           Upload
         </button>
       </div>
@@ -197,8 +200,11 @@ const dowloadReport = () => {
 </template>
 
 <style scoped>
-.submit-button {
+#work {
   padding-bottom: 6rem;
+}
+.submit-button {
+  background-color: #796fff;
 }
 
 ol {

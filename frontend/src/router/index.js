@@ -4,6 +4,9 @@ const HomePage = () => import("../pages/HomePage.vue");
 const AboutPage = () => import("../pages/AboutPage.vue");
 const ListingsPage = () => import("../pages/ListingsPage.vue");
 const ReportsPage = () => import("../pages/ReportsPage.vue");
+const DashboardPage = () => import("../pages/accounts/DashboardPage.vue");
+const RegisterPage = () => import("../pages/accounts/RegisterPage.vue");
+const LoginPage = () => import("../pages/accounts/LoginPage.vue");
 
 const router = createRouter({
   history: createWebHistory(),
@@ -40,14 +43,30 @@ const router = createRouter({
         title: "Reports",
       },
     },
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/AboutView.vue')
-    // }
+    {
+      path: "/dashboard",
+      name: "dashboard",
+      component: DashboardPage,
+      meta: {
+        title: "Dashboard",
+      },
+    },
+    {
+      path: "/register",
+      name: "register",
+      component: RegisterPage,
+      meta: {
+        title: "Register",
+      },
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: LoginPage,
+      meta: {
+        title: "Login",
+      },
+    },
   ],
 });
 

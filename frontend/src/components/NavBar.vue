@@ -32,30 +32,27 @@
       </ul>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item mr-3">
-          <a class="nav-link" href="/">
-            <i class="fas fa-user-plus"></i> Welcome Jason Dashboard</a
+          <router-link to="/dashboard" class="nav-link"
+            ><font-awesome-icon icon="fa-solid fa-user-plus" /> Welcome Jason
+            Dashboard</router-link
           >
         </li>
         <li class="nav-item mr-3">
-          <a
-            href="javascript:{document.getElementById('logout').submit()}"
-            class="nav-link"
-          >
-            <i class="fas fa-sign-out-alt"></i> Logout
-          </a>
-          <form action="#" method="POST" id="logout">
-            <input type="hidden" />
-          </form>
-        </li>
-        <li class="nav-item mr-3">
-          <a class="nav-link" href="/">
-            <i class="fas fa-user-plus"></i> Register</a
+          <router-link to="/" class="nav-link"
+            ><font-awesome-icon icon="fa-solid fa-sign-out-alt" />
+            Logout</router-link
           >
         </li>
         <li class="nav-item mr-3">
-          <a class="nav-link" href="/">
-            <i class="fas fa-sign-in-alt"></i>
-            Login</a
+          <router-link to="/register" class="nav-link"
+            ><font-awesome-icon icon="fa-solid fa-user-plus" />
+            Register</router-link
+          >
+        </li>
+        <li class="nav-item mr-3">
+          <router-link to="/login" class="nav-link"
+            ><font-awesome-icon icon="fa-solid fa-sign-in-alt" />
+            Login</router-link
           >
         </li>
       </ul>

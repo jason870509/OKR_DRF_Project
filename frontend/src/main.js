@@ -18,6 +18,9 @@ import {
   faShareSquare,
   faAddressBook,
   faHouseChimney,
+  faUserPlus,
+  faSignOutAlt,
+  faSignInAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { createApp } from "vue";
@@ -29,7 +32,15 @@ import router from "./router";
 const app = createApp(App);
 
 /* add icons to the library */
-library.add(faArrowCircleUp, faShareSquare, faAddressBook, faHouseChimney);
+library.add(
+  faArrowCircleUp,
+  faShareSquare,
+  faAddressBook,
+  faHouseChimney,
+  faUserPlus,
+  faSignOutAlt,
+  faSignInAlt
+);
 
 app.use(createPinia());
 app.use(router);
