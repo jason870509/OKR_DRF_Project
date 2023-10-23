@@ -1,14 +1,39 @@
-import './assets/main.css'
+import "bootstrap/dist/css/bootstrap.css";
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import "./assets/all.css";
+import "./assets/bootstrap.css";
+import "./assets/style.css";
+import "./assets/lightbox.min.css";
+import "./assets/main.css";
 
-import App from './App.vue'
-import router from './router'
+/* import the fontawesome core */
+import { library } from "@fortawesome/fontawesome-svg-core";
 
-const app = createApp(App)
+/* import font awesome icon component */
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-app.use(createPinia())
-app.use(router)
+/* import specific icons */
+import {
+  faArrowCircleUp,
+  faShareSquare,
+  faAddressBook,
+  faHouseChimney,
+} from "@fortawesome/free-solid-svg-icons";
 
-app.mount('#app')
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+
+import App from "./App.vue";
+import router from "./router";
+
+const app = createApp(App);
+
+/* add icons to the library */
+library.add(faArrowCircleUp, faShareSquare, faAddressBook, faHouseChimney);
+
+app.use(createPinia());
+app.use(router);
+app.component("font-awesome-icon", FontAwesomeIcon);
+app.mount("#app");
+
+import "bootstrap/dist/js/bootstrap.js";
