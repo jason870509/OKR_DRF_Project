@@ -78,10 +78,18 @@ WSGI_APPLICATION = 'okr.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+		'ENGINE': 'django.db.backends.mysql',
+		'NAME': 'report_db2',
+		'USER': 'charleskao',
+		'PASSWORD': 'Welcome113!',
+		'HOST': '192.168.14.87',
+        'PORT': '3306'
+	}
 }
 
 
@@ -130,3 +138,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Media Folder Settings
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+
+REST_FRAMEWORK = {
+	# "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+	# "PAGE_SIZE": 10
+}

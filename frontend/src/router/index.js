@@ -7,6 +7,7 @@ const ReportsPage = () => import("../pages/ReportsPage.vue");
 const DashboardPage = () => import("../pages/accounts/DashboardPage.vue");
 const RegisterPage = () => import("../pages/accounts/RegisterPage.vue");
 const LoginPage = () => import("../pages/accounts/LoginPage.vue");
+const SearchPage = () => import("../pages/SearchPage.vue");
 
 const router = createRouter({
   history: createWebHistory(),
@@ -65,6 +66,14 @@ const router = createRouter({
       component: LoginPage,
       meta: {
         title: "Login",
+      },
+    },
+    {
+      path: "/search",
+      name: "search",
+      component: SearchPage,
+      meta: {
+        title: "Search",
       },
     },
   ],

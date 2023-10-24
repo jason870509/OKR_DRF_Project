@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.css";
 
-import "./assets/all.css";
+// import "./assets/all.css";
 import "./assets/bootstrap.css";
 import "./assets/style.css";
 import "./assets/lightbox.min.css";
@@ -23,15 +23,16 @@ import {
   faSignInAlt,
   faPhone,
   faEnvelopeOpen,
+  faClock,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
   faFacebook,
-  faTwitter,
   faXTwitter,
   faLinkedin,
   faInstagram,
   faPinterest,
+  faLeanpub,
 } from "@fortawesome/free-brands-svg-icons";
 
 import { createApp } from "vue";
@@ -57,7 +58,9 @@ library.add(
   faXTwitter,
   faLinkedin,
   faInstagram,
-  faPinterest
+  faPinterest,
+  faLeanpub,
+  faClock
 );
 
 app.use(createPinia());

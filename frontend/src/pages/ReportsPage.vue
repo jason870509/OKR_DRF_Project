@@ -1,34 +1,12 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import useAxios from "../composables/useAxios";
+
+const axios = useAxios();
 const formCategory = ref(null);
-const categorys = ref([
-  { id: 1, category: "Testing" },
-  { id: 2, category: "Meeting" },
-  { id: 3, category: "Others" },
-]);
-const reports = ref([
-  {
-    id: 1,
-    category_id: 1,
-    title: "Testing 1",
-    description: "admin added 1.",
-    create_at: "2023-10-15",
-  },
-  {
-    id: 2,
-    category_id: 2,
-    title: "Meeting 1",
-    description: "admin added 1.",
-    create_at: "2023-10-15",
-  },
-  {
-    id: 3,
-    category_id: 2,
-    title: "Meeting 2",
-    description: "admin added 2.",
-    create_at: "2023-10-15",
-  },
-]);
+const categorys = ref({});
+const reports = ref({});
+const nowTime = ref(new Date());
 
 const showHide = (e) => {
   const list = e.target.nextElementSibling;
@@ -40,9 +18,68 @@ const showHide = (e) => {
   }
 };
 
-const dowloadReport = () => {
-  return "123";
+const data = ref({
+  author: "",
+  category: "",
+  description: "",
+  title: "",
+  file_path: null,
+});
+
+const getDateTime = (timeDate) => {
+  const year = timeDate.getFullYear();
+  const month = ("0" + (timeDate.getMonth() + 1)).slice(-2);
+  const date = ("0" + timeDate.getDate()).slice(-2);
+  const hours = ("0" + timeDate.getHours()).slice(-2);
+  const minutes = ("0" + timeDate.getMinutes()).slice(-2);
+  const seconds = ("0" + timeDate.getSeconds()).slice(-2);
+
+  const time = `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
+
+  return time;
 };
+
+const getReportsData = async () => {
+  const data = await axios.get("api/reports/list_create/");
+  reports.value = data.data;
+};
+
+const getCategory = async () => {
+  const response = await axios.get("api/reports/category/list_create/");
+  categorys.value = response.data;
+
+  Object.keys(categorys.value).forEach((key) => {
+    categorys.value[key].count = 0;
+  });
+
+  for (const report of reports.value) {
+    categorys.value[report.category.id - 1].count += 1;
+  }
+};
+
+const handleSumbit = async () => {
+  console.log(data.value);
+  const response = await axios.post("api/reports/list_create/", data.value, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  console.log(response);
+};
+
+const onFileChange = (e) => {
+  const files = e.target.files || e.dataTransfer.files;
+  if (!files.length) return;
+  data.value.file_path = files[0];
+  console.log(data.value);
+};
+
+onMounted(async () => {
+  await getReportsData();
+
+  await getCategory();
+  // nowTime.value = getNowTime();
+});
 </script>
 <template>
   <!-- Breadcrumb -->
@@ -61,11 +98,10 @@ const dowloadReport = () => {
       </nav>
     </div>
   </section>
-
   <section id="reports" class="py-4">
     <div class="container">
       <ol class="list-group">
-        <template v-for="category in categorys">
+        <template v-for="(category, index) in categorys">
           <li
             @click="showHide"
             class="list-group-item d-flex justify-content-between align-items-start"
@@ -82,32 +118,36 @@ const dowloadReport = () => {
             <span
               class="badge bg-primary rounded-pill"
               style="color: antiquewhite"
-              >{{ "category.count" }}</span
+              >{{ category.count }}</span
             >
           </li>
           <ol class="list-group" style="display: none">
             <template v-for="report in reports">
-              <li
-                class="list-group-item d-flex justify-content-between align-items-start"
-              >
-                <div class="ms-2 me-auto">
-                  <div
-                    class="fw-bold"
-                    style="font-weight: bold; font-size: 20px"
-                  >
-                    <a href="#" :download="dowloadReport">{{ report.title }}</a>
-                  </div>
-                  <br />
-                  {{ report.description }}
-                </div>
-                <span
-                  class="badge bg-primary rounded-pill"
-                  style="color: antiquewhite"
+              <template v-if="index + 1 == report.category.id">
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-start"
                 >
-                  {{ report.create_at }}
-                </span>
-              </li></template
-            >
+                  <div class="ms-2 me-auto">
+                    <div
+                      class="fw-bold"
+                      style="font-weight: bold; font-size: 20px"
+                    >
+                      <a :href="report.file_path" download target="_blank">{{
+                        report.title
+                      }}</a>
+                    </div>
+                    <br />
+                    {{ report.description }}
+                  </div>
+                  <span
+                    class="badge bg-primary rounded-pill"
+                    style="color: antiquewhite"
+                  >
+                    {{ getDateTime(new Date(report.create_time)) }}
+                  </span>
+                </li>
+              </template>
+            </template>
           </ol>
         </template>
       </ol>
@@ -122,15 +162,10 @@ const dowloadReport = () => {
       <h4>Upload your Report files</h4>
     </div>
 
-    <form
-      action="{% url 'reports' %}"
-      method="post"
-      enctype="multipart/form-data"
-      class=""
-    >
+    <form enctype="multipart/form-data" @submit.prevent="handleSumbit">
       <!-- {% csrf_token %} -->
       <div class="container">
-        <div class="input-group flex-nowrap mb-3" style="display: none">
+        <div class="input-group flex-nowrap mb-3">
           <span class="input-group-text">@</span>
           <input
             type="text"
@@ -138,7 +173,7 @@ const dowloadReport = () => {
             placeholder="Author"
             name="author"
             aria-describedby="addon-wrapping"
-            value="{{user.username}}"
+            v-model="data.author"
           />
         </div>
 
@@ -147,12 +182,12 @@ const dowloadReport = () => {
           <select
             name="category"
             class="form-control"
-            v-model="formCategory"
+            v-model="data.category"
             placeholder="Select Report Category"
           >
             <option selected disabled="disabled">Select Report Category</option>
             <template v-for="category in categorys">
-              <option :value="category.category">
+              <option :value="category.id">
                 {{ category.category }}
               </option>
             </template>
@@ -169,6 +204,21 @@ const dowloadReport = () => {
               placeholder="Title"
               name="title"
               aria-describedby="addon-wrapping"
+              v-model="data.title"
+            />
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">Description : </label>
+          <div class="input-group flex-nowrap mb-3">
+            <span class="input-group-text">@</span>
+            <textarea
+              type="text"
+              class="form-control"
+              placeholder="Description"
+              name="description"
+              aria-describedby="addon-wrapping"
+              v-model="data.description"
             />
           </div>
         </div>
@@ -182,6 +232,7 @@ const dowloadReport = () => {
               class="form-control"
               id="inputGroupFile02"
               name="file"
+              @change="onFileChange"
             />
           </div>
         </div>

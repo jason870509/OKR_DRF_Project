@@ -1,10 +1,34 @@
 <script setup>
-import { ref } from "vue";
-const categorys = ref([
-  { id: 1, category: "Testing" },
-  { id: 2, category: "Meeting" },
-  { id: 3, category: "Others" },
-]);
+import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
+import useAxios from "../composables/useAxios";
+import { useReportStore } from "../stores/report";
+
+const reportStore = useReportStore();
+const axios = useAxios();
+const router = useRouter();
+const categorys = ref({});
+const data = ref({
+  author: "",
+  category: "",
+  title: "",
+  year: "",
+  month: "",
+  day: "",
+});
+
+const handleSubmit = async () => {
+  const response = await axios.get("api/search/", { params: data.value });
+
+  reportStore.data = response.data;
+  console.log("1.", reportStore.data);
+  router.push("/search");
+};
+
+onMounted(async () => {
+  const response = await axios.get("api/reports/category/list_create/");
+  categorys.value = response.data;
+});
 </script>
 <template>
   <section id="search-title" class="py-5 text-white bg-dark">
@@ -46,7 +70,7 @@ const categorys = ref([
           quas, asperiores eveniet vel nostrum magnam voluptatum tempore!
           Consectetur, id commodi!
         </p>
-        <form action="">
+        <form @submit.prevent="handleSubmit">
           <!-- Form Row 1 -->
           <div class="form-row">
             <div class="col-md-4 mb-3">
@@ -54,6 +78,7 @@ const categorys = ref([
               <input
                 type="text"
                 name="title"
+                v-model="data.title"
                 class="form-control"
                 placeholder="Title"
               />
@@ -64,18 +89,22 @@ const categorys = ref([
               <input
                 type="text"
                 name="author"
+                v-model="data.author"
                 class="form-control"
                 placeholder="Author"
               />
             </div>
             <div class="col-md-4 mb-3">
-              <label class="sr-only">Year</label>
-              <select name="category" class="form-control">
+              <select
+                name="category"
+                class="form-control"
+                v-model="data.category"
+              >
                 <option selected="true" disabled="disabled">
                   Select Category
                 </option>
                 <template v-for="category in categorys">
-                  <option :value="category.category">
+                  <option :value="category.id">
                     {{ category.category }}
                   </option></template
                 >
@@ -89,6 +118,7 @@ const categorys = ref([
               <input
                 type="text"
                 name="year"
+                v-model="data.year"
                 class="form-control"
                 placeholder="Year"
               />
@@ -98,6 +128,7 @@ const categorys = ref([
               <input
                 type="text"
                 name="month"
+                v-model="data.month"
                 class="form-control"
                 placeholder="Month"
               />
@@ -107,6 +138,7 @@ const categorys = ref([
               <input
                 type="text"
                 name="day"
+                v-model="data.day"
                 class="form-control"
                 placeholder="Day"
               />

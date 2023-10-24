@@ -1,23 +1,47 @@
 from rest_framework import generics
 from reports.models import Report
 from reports.serializers import ReportSerializer
+from django.contrib.auth.models import User
+from reports.models import Category
+from reports.mixins import ReportResultsSetPagination
 
 
 
 class SearchAPIView(generics.ListAPIView):
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
+    pagination_class = ReportResultsSetPagination
 
     def get_queryset(self, *args, **kwargs):
         qs = super().get_queryset(*args, **kwargs)
-        q = self.request.GET.get('q') # 取得參數 q 的值
-        
+
+        author = self.request.GET.get('author')
+        title = self.request.GET.get('title') or ""
+        category = self.request.GET.get('category')
+
+        if author != "":
+            author = User.objects.filter(username=author).first() or ""
+        if category != "":
+            category = Category.objects.filter(id=category).first() or ""
+
         results = Report.objects.none()
         
-        if q is not None:
+        q = {
+            "author": author,
+            "title": title,
+            "category": category
+        }
+        print("Q: ", q)
+        search = False
+        for key in q:
+            if q[key] != "" and q[key] is not None:
+                search = True
+                break
+        
+        if search:
             user = None
-            if self.request.user.is_authenticated:
-                user = self.request.user
+            #     if self.request.user.is_authenticated:
+            #         user = self.request.user
             results = qs.search(q, user=user)
 
         return results

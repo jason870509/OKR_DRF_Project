@@ -5,8 +5,17 @@ from django.db.models import Q
 
 class ReportQuerySet(models.QuerySet):
     def search(self, query, user=None):
-        lookup = Q(title__icontains=query) | Q(description__icontains=query)
+
+        lookup = Q(title__icontains=query['title'])
         qs = self.filter(lookup)
+        
+        if query['author'] != "":
+            lookup = Q(author=query['author'])
+            qs = qs.filter(lookup)
+        if query['category'] != "":
+            lookup = Q(category=query['category'])
+            qs = qs.filter(lookup)
+        
 
         if user is not None:
             qs2 = self.filter(author=user).filter(lookup)
@@ -29,8 +38,8 @@ class Category(models.Model):
 
 
 class Report(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True)
-    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, null=True)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, default=1)
+    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, default=1)
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     file_path = models.FileField(upload_to='files/%Y/%m/%d')

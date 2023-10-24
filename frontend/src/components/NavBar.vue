@@ -74,6 +74,7 @@
 nav {
   background-color: rgb(55, 46, 182);
   text-transform: uppercase;
+  box-shadow: 0 0 8px black;
 }
 
 .toggle_container {
