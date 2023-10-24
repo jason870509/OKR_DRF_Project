@@ -40,12 +40,15 @@ const getDateTime = (timeDate) => {
 };
 
 const getReportsData = async () => {
-  const data = await axios.get("api/reports/list_create/");
+  console.log("123");
+  const data = await axios.get("http://localhost:8000/reports/list_create/");
   reports.value = data.data;
 };
 
 const getCategory = async () => {
-  const response = await axios.get("api/reports/category/list_create/");
+  const response = await axios.get(
+    "http://localhost:8000/reports/category/list_create/"
+  );
   categorys.value = response.data;
 
   Object.keys(categorys.value).forEach((key) => {
@@ -98,6 +101,7 @@ onMounted(async () => {
       </nav>
     </div>
   </section>
+
   <section id="reports" class="py-4">
     <div class="container">
       <ol class="list-group">

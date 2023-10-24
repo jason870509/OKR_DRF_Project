@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 	'rest_framework',
+	'corsheaders',
 	'reports',
 	'user',
 	'search'
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+	'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -78,18 +80,18 @@ WSGI_APPLICATION = 'okr.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
     'default': {
-		'ENGINE': 'django.db.backends.mysql',
-		'NAME': 'report_db2',
-		'USER': 'charleskao',
-		'PASSWORD': 'Welcome113!',
-		'HOST': '192.168.14.87',
-        'PORT': '3306'
-	}
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+    # 'default': {
+	# 	'ENGINE': 'django.db.backends.mysql',
+	# 	'NAME': 'report_db2',
+	# 	'USER': 'charleskao',
+	# 	'PASSWORD': 'Welcome113!',
+	# 	'HOST': '192.168.14.87',
+    #     'PORT': '3306'
+	# }
 }
 
 
@@ -144,3 +146,8 @@ REST_FRAMEWORK = {
 	# "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
 	# "PAGE_SIZE": 10
 }
+
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+]

@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 const HomePage = () => import("../pages/HomePage.vue");
 const AboutPage = () => import("../pages/AboutPage.vue");
 const ListingsPage = () => import("../pages/ListingsPage.vue");
+const ListingPage = () => import("../pages/ListingPage.vue");
 const ReportsPage = () => import("../pages/ReportsPage.vue");
 const DashboardPage = () => import("../pages/accounts/DashboardPage.vue");
 const RegisterPage = () => import("../pages/accounts/RegisterPage.vue");
@@ -34,6 +35,13 @@ const router = createRouter({
       component: ListingsPage,
       meta: {
         title: "Listings",
+      },
+    },
+    {
+      path: "/listings/:reportId",
+      component: ListingPage,
+      meta: {
+        title: "Listing",
       },
     },
     {

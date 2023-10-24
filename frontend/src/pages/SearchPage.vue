@@ -25,7 +25,9 @@ const reports = ref({});
 
 const handleSubmit = async () => {
   console.log(data.value);
-  const response = await axios.get("api/search/", { params: data.value });
+  const response = await axios.get("http://localhost:8000/search", {
+    params: data.value,
+  });
 
   reportStore.data = response.data;
   reports.value = reportStore.data.results;
@@ -51,7 +53,7 @@ const getDateTime = (timeDate) => {
 
 const changePageNumber = async (page) => {
   const response = await axios.get(
-    `api/search/?author=${data.value.author}&category=${data.value.category}&day=${data.value.day}&month=${data.value.month}&page=${page}&title=${data.value.title}&year=${data.value.year}`
+    `http://localhost:8000/search/?author=${data.value.author}&category=${data.value.category}&day=${data.value.day}&month=${data.value.month}&page=${page}&title=${data.value.title}&year=${data.value.year}`
   );
   console.log(response);
   currentPage.value = page;
@@ -63,7 +65,7 @@ const changePageNumber = async (page) => {
 };
 
 const changeToNextPage = async () => {
-  nextPage.value = nextPage.value.replace("http://localhost:8000", "api");
+  // nextPage.value = nextPage.value.replace("http://localhost:8000", "api");
 
   const response = await axios.get(nextPage.value);
 
@@ -76,10 +78,10 @@ const changeToNextPage = async () => {
 };
 
 const changeToPreviousPage = async () => {
-  previousPage.value = previousPage.value.replace(
-    "http://localhost:8000",
-    "api"
-  );
+  // previousPage.value = previousPage.value.replace(
+  //   "http://localhost:8000",
+  //   "api"
+  // );
 
   const response = await axios.get(previousPage.value);
 
@@ -98,7 +100,9 @@ onMounted(async () => {
     previousPage.value = reportStore.data.links.previous;
   }
 
-  const response = await axios.get("api/reports/category/list_create/");
+  const response = await axios.get(
+    "http://localhost:8000/reports/category/list_create/"
+  );
   categorys.value = response.data;
 });
 </script>
@@ -206,10 +210,13 @@ onMounted(async () => {
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
-            <a href="{% url 'index' %}"> <i class="fas fa-home"></i> Home</a>
+            <router-link to="/"
+              ><font-awesome-icon icon="fa-solid fa-house-chimney" size="xs" />
+              Home</router-link
+            >
           </li>
           <li class="breadcrumb-item">
-            <a href="{% url 'listings' %}">Browse Listings</a>
+            <router-link to="/listings"> Browse Listings</router-link>
           </li>
           <li class="breadcrumb-item active">Search Results</li>
         </ol>
@@ -252,7 +259,12 @@ onMounted(async () => {
                     report.author.username
                   }}</span>
                 </h2>
-                <a href="/" class="btn btn-primary btn-block">More Info</a>
+                <router-link
+                  :to="`listings/${report.id}/`"
+                  class="btn btn-primary btn-block"
+                >
+                  More Info</router-link
+                >
               </div>
             </div>
           </div>
