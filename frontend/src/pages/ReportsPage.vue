@@ -40,15 +40,12 @@ const getDateTime = (timeDate) => {
 };
 
 const getReportsData = async () => {
-  console.log("123");
-  const data = await axios.get("http://localhost:8000/reports/list_create/");
+  const data = await axios.get("/api/reports/list_create/");
   reports.value = data.data;
 };
 
 const getCategory = async () => {
-  const response = await axios.get(
-    "http://localhost:8000/reports/category/list_create/"
-  );
+  const response = await axios.get("/api/reports/category/list_create/");
   categorys.value = response.data;
 
   Object.keys(categorys.value).forEach((key) => {
@@ -62,7 +59,7 @@ const getCategory = async () => {
 
 const handleSumbit = async () => {
   console.log(data.value);
-  const response = await axios.post("api/reports/list_create/", data.value, {
+  const response = await axios.post("/api/reports/list_create/", data.value, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

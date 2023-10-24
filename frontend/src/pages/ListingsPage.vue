@@ -18,15 +18,14 @@ const data = ref({
 });
 
 const handleSubmit = async () => {
-  const response = await axios.get("api/search/", { params: data.value });
+  const response = await axios.get("/api/search/", { params: data.value });
 
   reportStore.data = response.data;
-  console.log("1.", reportStore.data);
   router.push("/search");
 };
 
 onMounted(async () => {
-  const response = await axios.get("api/reports/category/list_create/");
+  const response = await axios.get("/api/reports/category/list_create/");
   categorys.value = response.data;
 });
 </script>

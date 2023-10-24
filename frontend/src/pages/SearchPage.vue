@@ -25,7 +25,7 @@ const reports = ref({});
 
 const handleSubmit = async () => {
   console.log(data.value);
-  const response = await axios.get("http://localhost:8000/search", {
+  const response = await axios.get("/api/search/", {
     params: data.value,
   });
 
@@ -53,7 +53,7 @@ const getDateTime = (timeDate) => {
 
 const changePageNumber = async (page) => {
   const response = await axios.get(
-    `http://localhost:8000/search/?author=${data.value.author}&category=${data.value.category}&day=${data.value.day}&month=${data.value.month}&page=${page}&title=${data.value.title}&year=${data.value.year}`
+    `/api/search/?author=${data.value.author}&category=${data.value.category}&day=${data.value.day}&month=${data.value.month}&page=${page}&title=${data.value.title}&year=${data.value.year}`
   );
   console.log(response);
   currentPage.value = page;
@@ -65,7 +65,7 @@ const changePageNumber = async (page) => {
 };
 
 const changeToNextPage = async () => {
-  // nextPage.value = nextPage.value.replace("http://localhost:8000", "api");
+  nextPage.value = nextPage.value.replace("http://localhost:8000", "api");
 
   const response = await axios.get(nextPage.value);
 
@@ -78,10 +78,10 @@ const changeToNextPage = async () => {
 };
 
 const changeToPreviousPage = async () => {
-  // previousPage.value = previousPage.value.replace(
-  //   "http://localhost:8000",
-  //   "api"
-  // );
+  previousPage.value = previousPage.value.replace(
+    "http://localhost:8000",
+    "api"
+  );
 
   const response = await axios.get(previousPage.value);
 
@@ -100,9 +100,7 @@ onMounted(async () => {
     previousPage.value = reportStore.data.links.previous;
   }
 
-  const response = await axios.get(
-    "http://localhost:8000/reports/category/list_create/"
-  );
+  const response = await axios.get("/api/reports/category/list_create/");
   categorys.value = response.data;
 });
 </script>

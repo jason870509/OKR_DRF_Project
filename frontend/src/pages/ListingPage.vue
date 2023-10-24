@@ -9,9 +9,7 @@ const report = ref({});
 
 onMounted(async () => {
   console.log("123");
-  const response = await axios.get(
-    `http://localhost:8000/reports/${route.params.reportId}`
-  );
+  const response = await axios.get(`/api/reports/${route.params.reportId}/`);
   report.value = response.data;
   console.log(report.value);
 });

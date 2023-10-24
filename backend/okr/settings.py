@@ -143,11 +143,28 @@ MEDIA_URL = '/media/'
 
 
 REST_FRAMEWORK = {
+	'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+    ]       
 	# "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
 	# "PAGE_SIZE": 10
 }
 
 
+
+
+
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
 ]
+
+
+ALLOWED_HOSTS = ['*']
+
+# CORS_ALLOW_CREDENTIALS = True
+
+# CORS_ORIGIN_ALLOW_ALL = True
+
+# CORS_ALLOW_CREDENTIALS = True
+# CSRF_TRUSTED_ORIGINS = ['http://localhost:5173']
