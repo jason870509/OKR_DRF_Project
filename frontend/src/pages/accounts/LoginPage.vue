@@ -1,7 +1,34 @@
-<script setup></script>
+<script setup>
+import useAxios from "../../composables/useAxios";
+import { useRouter } from "vue-router";
+import { useUserStore } from "../../stores/user";
+
+const router = useRouter();
+const axios = useAxios();
+const userStore = useUserStore();
+
+const handleLogin = async () => {
+  const loginForm = document.getElementById("login-form");
+  let formData = new FormData(loginForm);
+  let data = Object.fromEntries(formData);
+
+  console.log(data);
+
+  try {
+    const response = await axios.post("/api/api/token/", data);
+
+    localStorage.setItem("access", response.data["access"]);
+    localStorage.setItem("refresh", response.data["refresh"]);
+    userStore.username = data["username"];
+    userStore.login = true;
+    router.push("/dashboard");
+    console.log(userStore.username);
+  } catch (err) {}
+};
+</script>
 
 <template>
-  <section id="login" class="bg-light py-5">
+  <section id="login" class="py-5">
     <div class="container">
       <div class="row">
         <div class="col-md-6 mx-auto">
@@ -12,7 +39,7 @@
               </h4>
             </div>
             <div class="card-body">
-              <form action="/" method="POST">
+              <form id="login-form" @submit.prevent="handleLogin">
                 <div class="form-group">
                   <label for="username">Username</label>
                   <input

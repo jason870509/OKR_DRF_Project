@@ -18,10 +18,21 @@ const data = ref({
 });
 
 const handleSubmit = async () => {
-  const response = await axios.get("/api/search/", { params: data.value });
+  try {
+    const response = await axios.get("/api/search/", {
+      params: data.value,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("access")}`,
+      },
+    });
 
-  reportStore.data = response.data;
-  router.push("/search");
+    reportStore.data = response.data;
+    router.push("/search");
+  } catch (err) {
+    alert("Please login before search.");
+    router.push("/login");
+  }
 };
 
 onMounted(async () => {
@@ -58,7 +69,7 @@ onMounted(async () => {
     </div>
   </section>
 
-  <section id="search_column " class="search">
+  <section id="search_column" class="search">
     <div class="container text-center">
       <div class="overlay p-5 bg-dark">
         <h1 class="display-4 mb-4 text-white">
@@ -153,6 +164,10 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+#search_column {
+  margin-top: 5rem;
+  margin-bottom: 20rem;
+}
 .lead {
   font-size: 1.25rem;
   font-weight: 300;

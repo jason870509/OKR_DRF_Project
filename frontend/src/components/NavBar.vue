@@ -1,4 +1,45 @@
-<script setup></script>
+<script setup>
+import { onMounted, ref, watchEffect } from "vue";
+import { useUserStore } from "../stores/user";
+import Cookies from "js-cookie";
+
+const userStore = useUserStore();
+
+function toggle() {
+  if (document.body.classList.value == "dark") {
+    document.body.classList.add("light");
+    document.body.classList.remove("dark");
+    document.getElementsByClassName("ball")[0].style.left = "2px";
+    document.getElementsByClassName("ball")[0].style.right = "";
+    Cookies.set("theme", "dark", { expires: 365 });
+  } else {
+    document.body.classList.add("dark");
+    document.body.classList.remove("light");
+    document.getElementsByClassName("ball")[0].style.left = "";
+    document.getElementsByClassName("ball")[0].style.right = "2px";
+    Cookies.set("theme", "light", { expires: 365 });
+  }
+}
+
+const handleLogout = () => {
+  userStore.login = false;
+  localStorage.clear();
+};
+
+onMounted(() => {
+  if (Cookies.get("theme") == "dark") {
+    document.body.classList.add("light");
+    document.body.classList.remove("dark");
+    document.getElementsByClassName("ball")[0].style.left = "2px";
+    document.getElementsByClassName("ball")[0].style.right = "";
+  } else {
+    document.body.classList.add("dark");
+    document.body.classList.remove("light");
+    document.getElementsByClassName("ball")[0].style.left = "";
+    document.getElementsByClassName("ball")[0].style.right = "2px";
+  }
+});
+</script>
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <a href="/"><img src="/img/logo.png" class="logo" alt="" /></a>
@@ -31,32 +72,33 @@
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item mr-3">
+        <li v-if="userStore.login" class="nav-item mr-3">
           <router-link to="/dashboard" class="nav-link"
-            ><font-awesome-icon icon="fa-solid fa-user-plus" /> Welcome Jason
-            Dashboard</router-link
+            ><font-awesome-icon icon="fa-solid fa-user-plus" /> Welcome
+            {{ userStore.username }}</router-link
           >
         </li>
-        <li class="nav-item mr-3">
-          <router-link to="/" class="nav-link"
-            ><font-awesome-icon icon="fa-solid fa-sign-out-alt" />
-            Logout</router-link
+        <li v-if="userStore.login" class="nav-item mr-3">
+          <router-link to="/login" class="nav-link"
+            ><a @click="handleLogout">
+              <font-awesome-icon icon="fa-solid fa-sign-out-alt" /> Logout
+            </a></router-link
           >
         </li>
-        <li class="nav-item mr-3">
+        <li v-if="!userStore.login" class="nav-item mr-3">
           <router-link to="/register" class="nav-link"
             ><font-awesome-icon icon="fa-solid fa-user-plus" />
             Register</router-link
           >
         </li>
-        <li class="nav-item mr-3">
+        <li v-if="!userStore.login" class="nav-item mr-3">
           <router-link to="/login" class="nav-link"
             ><font-awesome-icon icon="fa-solid fa-sign-in-alt" />
             Login</router-link
           >
         </li>
       </ul>
-      <div class="toggle_container" onClick="toggle()">
+      <div class="toggle_container" @click="toggle">
         <div class="toggle_icon">🌙</div>
         <div class="toggle_icon">🔆</div>
         <div class="ball"></div>

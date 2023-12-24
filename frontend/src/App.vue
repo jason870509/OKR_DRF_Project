@@ -1,16 +1,27 @@
 <script setup>
-// import { RouterLink, RouterView } from "vue-router";
+import { onMounted } from "vue";
+import { useUserStore } from "./stores/user";
+import { useVerify } from "./composables/useVerify";
+import useAxios from "./composables/useAxios";
 import NavBar from "./components/NavBar.vue";
 import Footer from "./components/Footer.vue";
+
+const { verifyAPI } = useVerify();
+
+onMounted(async () => {});
 </script>
 
 <template>
-  <header>
-    <NavBar />
-  </header>
+  <div class="wrapper">
+    <header>
+      <NavBar />
+    </header>
 
-  <RouterView />
-  <Footer />
+    <RouterView />
+  </div>
+  <div>
+    <Footer />
+  </div>
 </template>
 
 <style>
@@ -41,4 +52,8 @@ import Footer from "./components/Footer.vue";
 ::-webkit-scrollbar-thumb:hover {
   background: #ff53f1;
 } /*# sourceMappingURL=style.css.map */
+
+.wrapper {
+  flex-grow: 1; /*可佔滿垂直剩餘的空間*/
+}
 </style>

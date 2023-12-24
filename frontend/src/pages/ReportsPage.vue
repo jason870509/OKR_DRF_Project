@@ -1,8 +1,12 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import useAxios from "../composables/useAxios";
+import { useRouter } from "vue-router";
+import { useUserStore } from "../stores/user";
 
+const router = useRouter();
 const axios = useAxios();
+const userStore = useUserStore();
 const formCategory = ref(null);
 const categorys = ref({});
 const reports = ref({});
@@ -19,7 +23,6 @@ const showHide = (e) => {
 };
 
 const data = ref({
-  author: "",
   category: "",
   description: "",
   title: "",
@@ -45,26 +48,42 @@ const getReportsData = async () => {
 };
 
 const getCategory = async () => {
-  const response = await axios.get("/api/reports/category/list_create/");
+  const response = await axios.get("/api/reports/category/list_create/", {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
   categorys.value = response.data;
 
-  Object.keys(categorys.value).forEach((key) => {
-    categorys.value[key].count = 0;
-  });
+  console.log(categorys.value);
 
-  for (const report of reports.value) {
-    categorys.value[report.category.id - 1].count += 1;
+  if (categorys.value) {
+    Object.keys(categorys.value).forEach((key) => {
+      categorys.value[key].count = 0;
+    });
+  }
+  if (reports.value) {
+    for (const report of reports.value) {
+      categorys.value[report.category.id - 1].count += 1;
+    }
   }
 };
 
 const handleSumbit = async () => {
-  console.log(data.value);
-  const response = await axios.post("/api/reports/list_create/", data.value, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-  console.log(response);
+  try {
+    axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+    axios.defaults.xsrfCookieName = "csrftoken";
+    await axios.post("/api/reports/list_create/", data.value, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${localStorage.getItem("access")}`,
+      },
+    });
+    alert("Add Success!");
+    router.go();
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const onFileChange = (e) => {
@@ -105,13 +124,8 @@ onMounted(async () => {
         <template v-for="(category, index) in categorys">
           <li
             @click="showHide"
+            id="category-list"
             class="list-group-item d-flex justify-content-between align-items-start"
-            style="
-              background-color: #4ca4fd;
-              color: black;
-              cursor: pointer;
-              padding: 20px;
-            "
           >
             <div class="ms-2 me-auto">
               <div class="fw-bold">{{ category.category }}</div>
@@ -126,6 +140,7 @@ onMounted(async () => {
             <template v-for="report in reports">
               <template v-if="index + 1 == report.category.id">
                 <li
+                  id="report-list"
                   class="list-group-item d-flex justify-content-between align-items-start"
                 >
                   <div class="ms-2 me-auto">
@@ -156,8 +171,8 @@ onMounted(async () => {
   </section>
 
   <!-- Work -->
-  <!-- {% if user.is_authenticated %} -->
-  <section id="work" class="bg-dark text-white">
+
+  <section id="work" class="bg-dark text-white" v-if="userStore.login">
     <div class="text-center">
       <h2 class="display-4">Complete Form & Upload</h2>
       <h4>Upload your Report files</h4>
@@ -166,7 +181,7 @@ onMounted(async () => {
     <form enctype="multipart/form-data" @submit.prevent="handleSumbit">
       <!-- {% csrf_token %} -->
       <div class="container">
-        <div class="input-group flex-nowrap mb-3">
+        <!-- <div class="input-group flex-nowrap mb-3">
           <span class="input-group-text">@</span>
           <input
             type="text"
@@ -176,7 +191,7 @@ onMounted(async () => {
             aria-describedby="addon-wrapping"
             v-model="data.author"
           />
-        </div>
+        </div> -->
 
         <div class="mb-3">
           <label for="category" class="form-label">Category : </label>
@@ -261,5 +276,26 @@ onMounted(async () => {
 
 ol {
   transition: all 0.3s ease;
+}
+
+#reports {
+  margin-bottom: 10rem;
+}
+
+#category-list {
+  background: linear-gradient(to right, #2f6ad0, rgba(194, 233, 206, 0.667));
+  color: black;
+  cursor: pointer;
+  padding: 20px;
+}
+
+#report-list:hover {
+  background: rgba(228, 228, 228, 0.667);
+  color: black;
+  cursor: pointer;
+}
+
+#category-list:hover {
+  background: linear-gradient(to right, #095ef0, rgba(74, 243, 125, 0.667));
 }
 </style>

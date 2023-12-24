@@ -1,9 +1,10 @@
-from rest_framework import generics
+from rest_framework import generics, permissions
 from reports.models import Report
 from reports.serializers import ReportSerializer
 from django.contrib.auth.models import User
 from reports.models import Category
 from reports.mixins import ReportResultsSetPagination
+from reports.permissions import IsStaffEditorPermission
 
 
 
@@ -11,6 +12,9 @@ class SearchAPIView(generics.ListAPIView):
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
     pagination_class = ReportResultsSetPagination
+
+    # authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
 
     def get_queryset(self, *args, **kwargs):
         qs = super().get_queryset(*args, **kwargs)

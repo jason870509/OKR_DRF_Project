@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+import datetime
 from pathlib import Path
+from reports.permissions import IsStaffEditorPermission
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +27,7 @@ SECRET_KEY = 'django-insecure-4(^2ilh^681qjly#i2wm&^k41_reyy@=bdyps%&x!=cqz9!$9a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,8 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+	
 	'rest_framework',
+	'rest_framework_simplejwt',
 	'corsheaders',
+	
 	'reports',
 	'user',
 	'search'
@@ -138,21 +143,23 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Media Folder Settings
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+os.makedirs('C:/media', exist_ok=True)
+MEDIA_ROOT = os.path.join('C:/media')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 
 REST_FRAMEWORK = {
-	'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework.authentication.SessionAuthentication',
-        # 'rest_framework.authentication.BasicAuthentication',
-    ]       
-	# "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+		"rest_framework_simplejwt.authentication.JWTAuthentication"
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ],
+    # "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
 	# "PAGE_SIZE": 10
 }
-
-
-
 
 
 CORS_ALLOWED_ORIGINS = [
@@ -160,7 +167,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 
-ALLOWED_HOSTS = ['*']
+
 
 # CORS_ALLOW_CREDENTIALS = True
 
@@ -168,3 +175,21 @@ ALLOWED_HOSTS = ['*']
 
 # CORS_ALLOW_CREDENTIALS = True
 # CSRF_TRUSTED_ORIGINS = ['http://localhost:5173']
+
+
+
+
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": ["Bearer"], # header 開頭
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(hours=24), # 過期時間
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(minutes=60),
+}
+
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173'
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:5173']

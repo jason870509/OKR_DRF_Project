@@ -1,7 +1,27 @@
-s
-<script setup></script>
+<script setup>
+import useAxios from "../../composables/useAxios";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const axios = useAxios();
+
+const handleRegister = async () => {
+  const registerForm = document.getElementById("register-form");
+  let formData = new FormData(registerForm);
+  let data = Object.fromEntries(formData);
+
+  try {
+    await axios.post("/api/user/create/", data);
+
+    alert("Sign up seccessful.");
+    router.push("/login");
+  } catch (err) {
+    console.log(err);
+  }
+};
+</script>
 <template>
-  <section id="register" class="bg-light py-5">
+  <section id="register" class="py-5">
     <div class="container">
       <div class="row">
         <div class="col-md-6 mx-auto">
@@ -12,7 +32,7 @@ s
               </h4>
             </div>
             <div class="card-body">
-              <form action="{% url 'register' %}" method="POST">
+              <form id="register-form" @submit.prevent="handleRegister">
                 <div class="form-group">
                   <label for="first_name">First Name</label>
                   <input

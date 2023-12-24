@@ -22,7 +22,7 @@ function useAxios() {
     },
     (error) => {
       console.log(error);
-      return error;
+      throw error;
     }
   );
 

@@ -1,4 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
+import nProgress from "nprogress";
+import "nprogress/nprogress.css";
+import { useVerify } from "../composables/useVerify";
 // import Vue from "vue";
 const HomePage = () => import("../pages/HomePage.vue");
 const AboutPage = () => import("../pages/AboutPage.vue");
@@ -9,6 +12,8 @@ const DashboardPage = () => import("../pages/accounts/DashboardPage.vue");
 const RegisterPage = () => import("../pages/accounts/RegisterPage.vue");
 const LoginPage = () => import("../pages/accounts/LoginPage.vue");
 const SearchPage = () => import("../pages/SearchPage.vue");
+
+const { verifyAPI } = useVerify();
 
 const router = createRouter({
   history: createWebHistory(),
@@ -87,14 +92,25 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to, from) => {
-  console.log(to);
+router.beforeEach(async (to, from) => {
+  // console.log(to);
   // Use next tick to handle router history correctly
   // see: https://github.com/vuejs/vue-router/issues/914#issuecomment-384477609
   // Vue.nextTick(() => {
   //   document.title = to.meta.title;
   // });
+  nProgress.start();
   document.title = to.meta.title;
+  await verifyAPI();
+});
+
+nProgress.configure({
+  showSpinner: false,
+});
+
+// 全局后置钩子
+router.afterEach(() => {
+  nProgress.done(true);
 });
 
 export default router;

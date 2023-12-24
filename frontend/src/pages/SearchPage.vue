@@ -24,9 +24,12 @@ const data = ref({
 const reports = ref({});
 
 const handleSubmit = async () => {
-  console.log(data.value);
   const response = await axios.get("/api/search/", {
     params: data.value,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("access")}`,
+    },
   });
 
   reportStore.data = response.data;
@@ -53,7 +56,13 @@ const getDateTime = (timeDate) => {
 
 const changePageNumber = async (page) => {
   const response = await axios.get(
-    `/api/search/?author=${data.value.author}&category=${data.value.category}&day=${data.value.day}&month=${data.value.month}&page=${page}&title=${data.value.title}&year=${data.value.year}`
+    `/api/search/?author=${data.value.author}&category=${data.value.category}&day=${data.value.day}&month=${data.value.month}&page=${page}&title=${data.value.title}&year=${data.value.year}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("access")}`,
+      },
+    }
   );
   console.log(response);
   currentPage.value = page;

@@ -58,7 +58,7 @@
         <p class="about-desc">- Mobile Apps</p>
 
         <div>
-          <router-link to="/" class="button btn text-white btn-lg"
+          <router-link to="/dashboard" class="button btn text-white btn-lg"
             >Dashborad</router-link
           >
         </div>
