@@ -85,18 +85,18 @@ WSGI_APPLICATION = 'okr.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
     # 'default': {
-	# 	'ENGINE': 'django.db.backends.mysql',
-	# 	'NAME': 'report_db2',
-	# 	'USER': 'charleskao',
-	# 	'PASSWORD': 'Welcome113!',
-	# 	'HOST': '192.168.14.87',
-    #     'PORT': '3306'
-	# }
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
+    'default': {
+		'ENGINE': 'django.db.backends.mysql',
+		'NAME': 'report_db2',
+		'USER': 'charleskao',
+		'PASSWORD': 'Welcome113!',
+		'HOST': '192.168.14.87',
+        'PORT': '3306'
+	}
 }
 
 
@@ -164,6 +164,9 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
+    'http://192.168.14.87',
+    'http://192.168.14.87:11402',
+    'http://192.168.14.87:11403',
 ]
 
 
