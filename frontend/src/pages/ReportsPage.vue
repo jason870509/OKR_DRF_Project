@@ -148,9 +148,12 @@ onMounted(async () => {
                       class="fw-bold"
                       style="font-weight: bold; font-size: 20px"
                     >
-                      <a :href="report.file_path" download target="_blank">{{
-                        report.title
-                      }}</a>
+                      <a
+                        :href="report.file_path"
+                        download="report.pdf"
+                        target="_blank"
+                        >{{ report.title }}</a
+                      >
                     </div>
                     <br />
                     {{ report.description }}

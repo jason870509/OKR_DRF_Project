@@ -18,3 +18,13 @@ class UserSerializer(serializers.ModelSerializer):
             'email',
             'password',
         ]
+
+
+    def validate_password(self, value):
+        password = self.context['request'].data['password']
+        password2 = self.context['request'].data['password2']
+
+        if password != password2:
+            raise serializers.ValidationError("Passwords are not the same. Please Check.")
+
+        return super().validate(value)

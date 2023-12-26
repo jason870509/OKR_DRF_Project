@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import generics, permissions
 from django.contrib.auth.models import User
@@ -16,7 +17,7 @@ class UserCreateAPIView(generics.CreateAPIView):
     def perform_create(self, serializer):
         print(serializer.validated_data)
 
-        username = serializer.validated_data['username']
+        username = serializer.validated_data.get('username')
 
         
         if User.objects.filter(username=username).exists():
